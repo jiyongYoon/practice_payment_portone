@@ -1,5 +1,6 @@
 package jy.test.entity;
 
+import jy.test.enumeration.PaymentCheckType;
 import jy.test.enumeration.PaymentStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,14 +21,18 @@ public class Payment {
     private PaymentStatus status;
     private String paymentUid; // 결제 고유 번호
 
+    @Enumerated(EnumType.STRING)
+    private PaymentCheckType type;
+
     @Builder
     public Payment(Long price, PaymentStatus status) {
         this.price = price;
         this.status = status;
     }
 
-    public void changePaymentBySuccess(PaymentStatus status, String paymentUid) {
+    public void changePaymentBySuccess(PaymentStatus status, String paymentUid, PaymentCheckType type) {
         this.status = status;
         this.paymentUid = paymentUid;
+        this.type = type;
     }
 }

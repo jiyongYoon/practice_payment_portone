@@ -10,7 +10,9 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ToString
 public class PaymentCallbackRequest {
     private String paymentUid; // 결제 고유 번호
     private String orderUid; // 주문 고유 번호
+    private String status; // 결제 상태
 }
