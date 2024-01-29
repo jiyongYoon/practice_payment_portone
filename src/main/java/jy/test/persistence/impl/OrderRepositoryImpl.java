@@ -16,12 +16,12 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Optional<Order> findOrderFetchPaymentAndMember(String orderUid) {
-        return jpaRepository.findOrderAndPaymentAndMember(orderUid);
+        return jpaRepository.findOrderFetchPaymentAndMember(orderUid);
     }
 
     @Override
     public Optional<Order> findOrderFetchPayment(String orderUid) {
-        return jpaRepository.findOrderAndPayment(orderUid);
+        return jpaRepository.findOrderFetchPayment(orderUid);
     }
 
     @Override

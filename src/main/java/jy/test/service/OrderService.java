@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,7 @@ public class OrderService {
     private final OrderRepositoryImpl orderRepository;
     private final PaymentRepositoryImpl paymentRepository;
 
-    public Order autoOrder(Member member) {
+    public Order autoOrder(Member member, String itemName, Instant now) {
         // 임시 결제내역 생성
         Payment payment = Payment.builder()
                 .price(1000L)
@@ -35,9 +36,10 @@ public class OrderService {
         Order order = Order.builder()
                 .member(member)
                 .price(1000L)
-                .itemName("1달러샵 상품")
+                .itemName(itemName)
                 .orderUid(UUID.randomUUID().toString())
                 .payment(payment)
+                .orderedAt(now)
                 .build();
 
         return orderRepository.save(order);

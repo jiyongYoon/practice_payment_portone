@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -18,6 +19,7 @@ public class Order {
     private Long price;
     private String itemName;
     private String orderUid; // 주문번호
+    private Instant orderedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -28,11 +30,12 @@ public class Order {
     private Payment payment;
 
     @Builder
-    public Order(Long price, String itemName, String orderUid, Member member, Payment payment) {
+    public Order(Long price, String itemName, String orderUid, Member member, Payment payment, Instant orderedAt) {
         this.price = price;
         this.itemName = itemName;
         this.orderUid = orderUid;
         this.member = member;
         this.payment = payment;
+        this.orderedAt = orderedAt;
     }
 }

@@ -14,4 +14,5 @@ public class RequestPayDto {
     private Long paymentPrice;
     private String buyerEmail;
     private String buyerAddress;
+    private String customerUid;
 }

@@ -40,6 +40,7 @@
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     data: JSON.stringify({
+                      "pay_type": 'IRREGULAR', // 비정기 결제
                       "payment_uid": rsp.imp_uid,      // 결제 고유번호
                       "order_uid": rsp.merchant_uid   // 주문번호
                     })
@@ -57,12 +58,68 @@
                 }
               });
     }
+
+    function requestAutoPay() {
+
+      var orderUid = '[[${requestDto.orderUid}]]';
+      var itemName = '[[${requestDto.itemName}]]';
+      var paymentPrice = [[${requestDto.paymentPrice}]];
+      var buyerName = '[[${requestDto.buyerName}]]';
+      var buyerEmail = '[[${requestDto.buyerEmail}]]';
+      var buyerAddress = '[[${requestDto.buyerAddress}]]';
+      var customer_uid = '[[${requestDto.customerUid}]]';
+
+      IMP.request_pay({
+                pg : 'kakaopay.TCSUBSCRIP',
+                pay_method : 'card',
+                merchant_uid: orderUid, // 주문 번호
+                name : itemName, // 상품 이름
+                amount : paymentPrice, // 상품 가격
+                buyer_email : buyerEmail, // 구매자 이메일
+                buyer_name : buyerName, // 구매자 이름
+                buyer_tel : '010-1234-5678', // 임의의 값
+                buyer_addr : buyerAddress, // 구매자 주소
+                buyer_postcode : '123-456', // 임의의 값
+                customer_uid : customer_uid, // 빌링키 발급을 위한 고객의 카드별 고유값
+                notice_url : "https://1b6d-211-55-64-30.ngrok-free.app/payment/webhook/auto" // 웹훅 url
+              },
+              function(rsp) {
+                if (rsp.success) {
+                  alert('call back!!: ' + JSON.stringify(rsp));
+                  // 빌링키 발급 성공 시 jQuery로 HTTP 요청
+                  jQuery.ajax({
+                    url: "/billings",
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    data: JSON.stringify({
+                      "response": rsp,
+                      "buyer_name": rsp.buyer_name, // 고객이름
+                      // "paid_amount": rsp.paid_amount, // 결제 금액
+                      "imp_uid": rsp.imp_uid, // 결제 고유번호
+                      "merchant_uid": rsp.merchant_uid, // 주문번호
+                      "customer_uid": rsp.customer_uid, // 빌링키 1:1 매핑 키
+                      "pay_type": 'REGULAR', // 정기결제
+                    })
+                  }).done(function (response) {
+                    console.log(response);
+                    alert('발급 완료!' + rsp);
+                    window.location.href = "/success-billings";
+                  })
+                } else {
+                  alert('발급 실패!' + rsp);
+                  window.location.href = "/fail-billings";
+                }
+              });
+    }
   </script>
 </head>
 <body>
 <h1>결제 페이지</h1>
 <button th:with="requestDto = ${requestDto}" onclick="requestPay()">
-  결제하기
+  단건결제하기
+</button>
+<button th:with="requestDto = ${requestDto}" onclick="requestAutoPay()">
+  정기결제하기
 </button>
 </body>
 </html>

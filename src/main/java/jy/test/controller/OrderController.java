@@ -2,6 +2,7 @@ package jy.test.controller;
 
 import jy.test.entity.Member;
 import jy.test.entity.Order;
+import jy.test.persistence.impl.MemberRepositoryImpl;
 import jy.test.service.MemberService;
 import jy.test.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
 
     private final MemberService memberService;
+    private final MemberRepositoryImpl memberRepository;
     private final OrderService orderService;
 
     @GetMapping("/order")
@@ -34,8 +37,12 @@ public class OrderController {
 
     @PostMapping("/order")
     public String autoOrder() {
-        Member member = memberService.autoRegister();
-        Order order = orderService.autoOrder(member);
+        Member member = memberRepository.findById(1L).orElse(null);
+        if (member == null) {
+            member = memberService.autoRegister();
+        }
+
+        Order order = orderService.autoOrder(member, "단건 결제상품", Instant.now());
 
         String message = "주문 실패";
         if(order != null) {
