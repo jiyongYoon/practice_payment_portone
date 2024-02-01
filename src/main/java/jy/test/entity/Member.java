@@ -33,7 +33,7 @@ public class Member {
         this.billingIssuance = true;
     }
 
-    public void isBillingIssued() {
+    public void validateBillingIssued() {
          if (!this.billingIssuance) {
              throw new RuntimeException("빌링키 발급 안됨");
          }

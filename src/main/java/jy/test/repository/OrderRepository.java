@@ -8,7 +8,7 @@ public interface OrderRepository {
 
     Optional<Order> findOrderFetchPaymentAndMember(String orderUid);
 
-    Optional<Order> findOrderFetchPayment(String orderUid);
+    Optional<Order> findOrderFetchPaymentAndMemberForUpdate(String orderUid);
 
     Order save(Order order);
 

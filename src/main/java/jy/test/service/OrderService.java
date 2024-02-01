@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -43,5 +44,10 @@ public class OrderService {
                 .build();
 
         return orderRepository.save(order);
+    }
+
+    public Order getOrder(String orderUid) {
+        return orderRepository.findOrderFetchPaymentAndMember(orderUid)
+                .orElseThrow(NoSuchElementException::new);
     }
 }

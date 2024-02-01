@@ -29,18 +29,30 @@ public class PaymentHistory {
     @Enumerated(EnumType.STRING)
     private PaymentHistoryType paymentHistoryType;
 
+    private String message;
+
     public void markHistoryType(PaymentHistoryType paymentHistoryType) {
         this.paymentHistoryType = paymentHistoryType;
     }
 
+    public void updateHistoryInfo(String paymentUid,
+                                  PaymentHistoryType paymentHistoryType,
+                                  String message) {
+        this.paymentUid = paymentUid;
+        this.paymentHistoryType = paymentHistoryType;
+        this.message = message;
+    }
+
     @Builder
     public PaymentHistory(String paymentUid, String orderUid, Instant createdAt,
-                          PaymentCheckType paymentCheckType, PaymentType paymentType, PaymentHistoryType paymentHistoryType) {
+                          PaymentCheckType paymentCheckType, PaymentType paymentType,
+                          PaymentHistoryType paymentHistoryType, String message) {
         this.paymentUid = paymentUid;
         this.orderUid = orderUid;
         this.createdAt = createdAt;
         this.paymentCheckType = paymentCheckType;
         this.paymentType = paymentType;
         this.paymentHistoryType = paymentHistoryType;
+        this.message = message;
     }
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -28,19 +29,22 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType; // 정기 / 비정기
 
+    private Instant paidAt; // 실제 결제 시간
+
     @Builder
     public Payment(Long price, PaymentStatus status) {
         this.price = price;
         this.status = status;
     }
 
-    public void changePaymentBySuccess(PaymentStatus status,
-                                       String paymentUid,
+    public void changePaymentBySuccess(String paymentUid,
                                        PaymentCheckType paymentCheckType,
-                                       PaymentType paymentType) {
-        this.status = status;
+                                       PaymentType paymentType,
+                                       Instant paidAt) {
+        this.status = PaymentStatus.OK;
         this.paymentUid = paymentUid;
         this.paymentCheckType = paymentCheckType;
         this.paymentType = paymentType;
+        this.paidAt = paidAt;
     }
 }

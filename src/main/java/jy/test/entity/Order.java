@@ -19,7 +19,9 @@ public class Order {
     private Long price;
     private String itemName;
     private String orderUid; // 주문번호
-    private Instant orderedAt;
+    private Instant orderedAt; // 주문 요청 시간
+    private Instant willPayAt; // 결제 예정일
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -38,4 +40,13 @@ public class Order {
         this.payment = payment;
         this.orderedAt = orderedAt;
     }
+
+    public void registerSchedulingPayment(Instant willPayAt) {
+        this.willPayAt = willPayAt;
+    }
+
+//    public void paidAt(Instant paidAt) {
+//        this.paidAt = paidAt;
+//    }
+
 }
